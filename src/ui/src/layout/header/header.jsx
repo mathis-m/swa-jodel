@@ -4,12 +4,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import {useIsLoggedIn} from "../../redux/features/userSlice";
-
+import "./header.scss"
 const Header = () => {
     const isLoggedIn = useIsLoggedIn();
     return (
         <div className="header-container">
-            <Container >
+            <Container className="header-content">
                 <div className="title">
                     Yodel
                 </div>

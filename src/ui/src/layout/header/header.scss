@@ -3,11 +3,16 @@
   height: 60px;
   background-color: aqua;
 
-  .title {
-    color: white;
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    .title {
+      color: white;
+    }
+
+    .actions {
+      color: white;
+    }
   }
 
-  .actions {
-    color: white;
-  }
 }

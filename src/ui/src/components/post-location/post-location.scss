@@ -1,0 +1,10 @@
+.post-location {
+  padding-bottom: 5px;
+  padding-left: 5px;
+  justify-content: center;
+  display: flex;
+  .location {
+    font-weight: 500;
+    font-size: 1.25rem;
+  }
+}

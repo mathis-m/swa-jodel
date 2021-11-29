@@ -1,0 +1,17 @@
+@import "../../variables";
+.add-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 65px;
+  width: 100%;
+  .dropin {
+    background-color: $base-color;
+    border-radius: 50%;
+    box-shadow: 0 0 14px 8px rgba(0,0,0,0.3);
+    #add-icon {
+      padding: 0.5rem;
+    }
+  }
+}

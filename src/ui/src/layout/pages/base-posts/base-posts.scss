@@ -1,0 +1,12 @@
+.page {
+  flex: 0 1 100%;
+  padding-top: 10px;
+  overflow-y: scroll;
+  align-content: flex-start;
+  .row {
+    margin: 0;
+  }
+  .post-container {
+    padding: calc(var(--bs-gutter-x) * .5);
+  }
+}

@@ -1,18 +1,35 @@
+@import "../../variables";
+
 .header-container {
   width: 100%;
-  height: 60px;
-  background-color: aqua;
+  background-color: $base-color;
 
   .header-content {
     display: flex;
     justify-content: space-between;
+
     .title {
       color: white;
+      font-size: 2rem !important;
+      font-weight: bold !important;
+      text-decoration: underline !important;
     }
 
-    .actions {
-      color: white;
+    .header-icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      #first-item {
+        margin-right: 20px;
+      }
+      .header-icon {
+        padding: 0;
+        * {
+          width: 40px;
+          height: 40px;
+        }
+      }
     }
   }
-
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenAPI UI (Powered by Quarkus 2.5.0.Final)</title>
+  <link rel="stylesheet" type="text/css" href="/q/docs/swagger-ui.css" >
+  <link rel="stylesheet" type="text/css" href="/q/docs/theme-feeling-blue.css" >
+
+  <link rel="shortcut icon" href="/q/docs/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/q/docs/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="/q/docs/style.css" >
+</head>
+
+<body>
+<div id="swagger-ui"></div>
+<script src="/q/docs/swagger-ui-bundle.js" charset="UTF-8"></script>
+<script src="/q/docs/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+<script>
+
+  window.onload = function() {
+
+    // If Url is relative, append the host and port
+    var oar = "/q/docs/oauth2-redirect.html";
+    if(oar.startsWith("/")){
+      oar = window.location.protocol + "//" + window.location.host + oar;
+    }
+
+    console.log(oar);
+
+    var ui = SwaggerUIBundle({
+      url: '/q/openapi',
+      dom_id: '#swagger-ui',
+      deepLinking: true,
+      persistAuthorization: true,
+      presets: [SwaggerUIBundle.presets.apis,SwaggerUIStandalonePreset],
+      plugins: [SwaggerUIBundle.plugins.DownloadUrl, {
+        statePlugins: {
+          auth: {
+            wrapSelectors: {
+              authorized: (oriSelector, system) => (state, ...args) => {
+                const authorized = oriSelector(state, ...args);
+
+                if(authorized.has("Google")) {
+                  return authorized.setIn(["Google", "token", "access_token"], authorized.getIn(["Google", "token", "id_token"]))
+                }
+
+                return authorized;
+              }
+            }
+          }
+        }
+      }],
+      layout: 'StandaloneLayout',
+      oauth2RedirectUrl: oar,
+    })
+
+
+    window.ui = ui;
+
+    document.getElementsByClassName("link")[0].innerHTML = "<a id='swaggerUiLogoLink' href='/q/dev'><img src='/q/docs/logo.png' alt='OpenAPI UI (Powered by Quarkus 2.5.0.Final)' height='44' align='middle'></a><a id='swaggerUiTitleLink' href='/q/docs'></a>";
+  }
+</script>
+</body>
+</html>

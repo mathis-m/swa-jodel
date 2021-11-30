@@ -1,8 +1,6 @@
 package de.swa.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import de.swa.infrastructure.entities.UserEntity;
-import de.swa.infrastructure.repositories.UserRepository;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.IdentityProvider;
@@ -14,11 +12,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 import org.hibernate.FlushMode;
-import org.hibernate.Session;
-import org.hibernate.SimpleNaturalIdLoadAccess;
 
 @ApplicationScoped
 public class GoogleOrFacebookJWTValidator implements IdentityProvider<GoogleOrFacebookTokenAuthRequest> {

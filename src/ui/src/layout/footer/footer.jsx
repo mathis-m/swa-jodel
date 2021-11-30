@@ -14,19 +14,19 @@ const Footer = () => {
         <Navbar variant="dark" className="nav-container" expand="lg">
             <Container>
                 <Row>
-                    <Col sm={4} className="other-cols">
+                    <Col xs={4} className="other-cols">
                         <Nav.Link eventKey="latest-posts" as={Link} to="/"
                                   className="nav-icon" id="nav-item-first">
                             <LatestPostsIcon sx={{color: "white"}}/>
                         </Nav.Link>
                     </Col>
-                    <Col sm={4} className="other-cols">
+                    <Col xs={4} className="other-cols">
                         <Nav.Link eventKey="most-comments" as={Link} to="/most-comments"
                                   className="nav-icon">
                             <MostCommentsIcon sx={{color: "white"}}/>
                         </Nav.Link>
                     </Col>
-                    <Col sm={4} className="other-cols" id="nav-item-last">
+                    <Col xs={4} className="other-cols" id="nav-item-last">
                         <Nav.Link eventKey="most-voted" as={Link} to="/highest-voting"
                                   className="nav-icon">
                             <MostVotedIcon sx={{color: "white"}}/>

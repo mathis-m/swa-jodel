@@ -10,15 +10,35 @@ import {postDownVoted, postUpVoted, useVoting} from "../../redux/features/voting
 const PostVote = ({postId}) => {
     const dispatch = useDispatch();
     const {hasUpVoted, hasDownVoted, voteCount} = useVoting(postId);
+    let sxUp = {color: hasUpVoted ? "#7A9F35" : "white"};
+    let sxDown = {color: hasDownVoted ? "#E7410FFF" : "white"};
+    const withStroke = {
+        stroke: "white",
+        strokeLocation: "inside",
+        strokeLinecap: "round",
+        strokeLinejoin: "bevel"
+    }
+    if(hasUpVoted) {
+        sxUp = {
+            ...sxUp,
+            ...withStroke
+        }
+    }
+    if(hasDownVoted) {
+        sxDown = {
+            ...sxDown,
+            ...withStroke
+        }
+    }
     return (
         <div className="post-vote">
-            <IconButton sx={{color: hasUpVoted ? "#7A9F35" : "white"}} onClick={() => dispatch(postUpVoted(postId))}>
+            <IconButton sx={sxUp} onClick={() => dispatch(postUpVoted(postId))}>
                 <UpVoteIcon sx={{fontSize: "48px"}}/>
             </IconButton>
             <div className="vote-count">
                 {voteCount}
             </div>
-            <IconButton sx={{color: hasDownVoted ? "#E7410FFF" : "white"}} onClick={() => dispatch(postDownVoted(postId))}>
+            <IconButton sx={sxDown} onClick={() => dispatch(postDownVoted(postId))}>
                 <DownVoteIcon sx={{fontSize: "48px" }}/>
             </IconButton>
         </div>

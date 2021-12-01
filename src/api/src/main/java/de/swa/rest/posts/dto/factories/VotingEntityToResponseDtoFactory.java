@@ -1,6 +1,5 @@
 package de.swa.rest.posts.dto.factories;
 
-import de.swa.infrastructure.entities.PostEntity;
 import de.swa.infrastructure.entities.VotingEntity;
 import de.swa.infrastructure.repositories.models.PostVotingModel;
 import de.swa.rest.posts.dto.PostVotingResponseDto;

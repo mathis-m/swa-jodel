@@ -5,6 +5,7 @@ import {postApi} from "../../api/post/post-api";
 const initialState = {
     posts: [],
     status: "idle",
+    reFetchStatus: "idle",
     error: null,
     currentPage: 0,
     hasMore: true
@@ -53,19 +54,27 @@ export const highestVotingSlice = createSlice({
                 state.error = action.error.message;
             });
         builder
+            .addCase(reFetchHighestVotedPosts.pending, (state) => {
+                state.reFetchStatus = "loading";
+            })
+            .addCase(reFetchHighestVotedPosts.rejected, (state) => {
+                state.reFetchStatus = "failed";
+            })
             .addCase(reFetchHighestVotedPosts.fulfilled, (state, action) => {
                 const posts = action.payload;
 
                 if (posts.length === 0) {
                     state.hasMore = false;
-                    state.currentPage = 0;
+                    state.currentPage = 1;
                     state.status = 'succeeded';
+                    state.reFetchStatus = "succeeded";
                     return;
                 }
                 state.posts = posts;
                 state.hasMore = true;
                 state.status = 'succeeded';
-                state.currentPage = 0;
+                state.reFetchStatus = "succeeded";
+                state.currentPage = 1;
             })
     }
 })
@@ -75,7 +84,6 @@ export const {
 } = highestVotingSlice.actions
 
 const state = (state) => state.highestVotesPosts;
-const votingState = (state) => state.votes.votes;
 const selectCurrentPage = createSelector(
     state,
     state => state.currentPage
@@ -98,5 +106,11 @@ export const selectStatusPosts = createSelector(
     state => state.status
 );
 export const usePostFetchingStatus = () => useSelector(selectStatusPosts);
+
+export const selectReFetchStatusPosts = createSelector(
+    state,
+    state => state.reFetchStatus
+);
+export const usePostReFetchStatus = () => useSelector(selectReFetchStatusPosts);
 
 export default highestVotingSlice.reducer;

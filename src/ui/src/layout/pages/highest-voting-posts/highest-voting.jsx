@@ -4,6 +4,7 @@ import {
     reFetchHighestVotedPosts,
     useHasMorePosts,
     usePostFetchingStatus,
+    usePostReFetchStatus,
     usePosts
 } from "../../../redux/features/highestVoting";
 import BasePosts from "../base-posts/base-posts";
@@ -15,14 +16,16 @@ const HighestVoting = () => {
     const dispatch = useDispatch()
     const hasMore = useHasMorePosts()
     const status = usePostFetchingStatus();
+    const isReloading = usePostReFetchStatus() === "loading";
     const fetchMore = () => dispatch(fetchNextHighestVotedPosts());
     useEffect(() => {
-        if (status === 'idle') {
+        if (status === 'idle' && !isReloading) {
             dispatch(fetchNextHighestVotedPosts());
-        } else {
+        } else if (!isReloading) {
             dispatch(reFetchHighestVotedPosts());
         }
     }, [dispatch]);
-    return (<BasePosts posts={posts} fetchMoreData={fetchMore} hasMore={hasMore} listKey={"voting"}/>)
+    return (<BasePosts posts={posts} fetchMoreData={fetchMore} hasMore={hasMore} listKey={"voting"}
+                       isReloading={isReloading}/>)
 }
 export default HighestVoting;

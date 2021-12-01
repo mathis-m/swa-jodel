@@ -9,7 +9,6 @@ import {useMediumDisplay} from "../../hooks/useDisplay";
 import {Link} from "react-router-dom";
 
 const Footer = () => {
-    const isMedium = useMediumDisplay();
     return (
         <Navbar variant="dark" className="nav-container" expand="lg">
             <Container>

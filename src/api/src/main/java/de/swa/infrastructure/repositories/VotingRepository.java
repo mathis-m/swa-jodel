@@ -17,10 +17,12 @@ public class VotingRepository implements PanacheRepository<VotingEntity> {
         var voting = this
                 .find("userId = ?1 and postId = ?2", userId, postId).firstResult();
         var correction = 0;
+        var model = new PostVotingModel();
         if (voting == null) {
             var entity = new VotingEntity(userId, postId, isUpVote);
             entity.persist();
             correction = isUpVote ? 1 : -1;
+            model.voting = entity;
         } else {
             if (voting.value == 0) {
                 voting.value = isUpVote ? 1 : -1;
@@ -35,10 +37,9 @@ public class VotingRepository implements PanacheRepository<VotingEntity> {
                 voting.persist();
                 correction = isUpVote ? 2 : 1;
             }
+            model.voting = voting;
         }
         var post= postRepository.updateVoteCount(postId, correction);
-        var model = new PostVotingModel();
-        model.voting = voting;
         model.post = post;
         return model;
     }

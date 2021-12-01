@@ -7,14 +7,13 @@ import io.quarkus.security.jpa.UserDefinition;
 import io.quarkus.security.jpa.Username;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @UserDefinition
 @Table(name = "users")
-public class UserEntity extends PanacheEntity implements Serializable {
+public class UserEntity extends PanacheEntity {
     @Column(name = "username", length = 64, unique = true)
     @Username
     public String userName;
@@ -31,6 +30,12 @@ public class UserEntity extends PanacheEntity implements Serializable {
     @OneToMany(mappedBy = "userId")
     public List<VotingEntity> votings;
 
+    @OneToMany(mappedBy = "userId")
+    public List<PostEntity> posts;
+
+    @OneToMany(mappedBy = "userId")
+    public List<CommentEntity> comments;
+
     @Column(name = "passwordHash")
     @Password
     public String passwordHash;
@@ -43,10 +48,7 @@ public class UserEntity extends PanacheEntity implements Serializable {
 
     public UserEntity() {
         this.votings = new ArrayList<>();
-    }
-
-    public UserEntity(String name) {
-        this.userName = name;
-        this.votings = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.posts = new ArrayList<>();
     }
 }

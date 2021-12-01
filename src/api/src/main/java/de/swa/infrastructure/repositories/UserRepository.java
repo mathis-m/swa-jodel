@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 public class UserRepository implements PanacheRepository<UserEntity> {
     @Transactional
-    public void createLocalUser(String userName, String password) throws UniqueUserNameRequiredException {
+    public UserEntity createLocalUser(String userName, String password) throws UniqueUserNameRequiredException {
         var userNameExistCount = this.count("username", userName);
         if (userNameExistCount > 0) {
            throw new UniqueUserNameRequiredException(userName);
@@ -23,6 +23,7 @@ public class UserRepository implements PanacheRepository<UserEntity> {
         entity.isExternal = false;
         entity.role = "user";
         entity.persist();
+        return entity;
     }
 
     @Transactional

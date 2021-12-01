@@ -1,0 +1,27 @@
+@import "../../../variables";
+.login-page {
+  flex: 0 1 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .login {
+    border: 4px solid $base-color;
+    border-radius: 10px;
+    box-shadow: 0 0 28px 14px rgba(0,0,0,0.25);
+    margin: auto;
+    padding: 75px;
+
+    .login-font {
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    .login-methods {
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import mostCommentsPostSliceReducer from "./features/mostCommentsPostSlice";
 import votingSliceReducer from "./features/votingSlice";
 import highestVotingSliceReducer from "./features/highestVoting";
 import {storeAccessor} from "./store-accessor";
+
 export const store = configureStore({
     reducer: {
         user: userSliceReducer,

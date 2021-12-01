@@ -5,14 +5,7 @@ import DownVoteIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import "./post-vote.scss"
 import {IconButton} from "@mui/material";
 import {useDispatch} from "react-redux";
-import {
-    fetchVotingForPost,
-    postDownVoted,
-    postUpVoted,
-    sendPostDownVoted,
-    sendPostUpVoted,
-    useVoting
-} from "../../redux/features/votingSlice";
+import {postDownVoted, postUpVoted, useVoting} from "../../redux/features/votingSlice";
 import {useIsLoggedIn} from "../../redux/features/userSlice";
 
 const PostVote = ({postId}) => {

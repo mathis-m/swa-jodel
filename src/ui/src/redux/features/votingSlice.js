@@ -1,6 +1,5 @@
 import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
-import moment from "moment";
 import {fetchNextLatestPosts, reFetchNextLatestPosts} from "./latestPostSlice";
 import {fetchNextHighestVotedPosts, reFetchHighestVotedPosts} from "./highestVoting";
 import {fetchNextMostCommentsPosts, reFetchMostCommentsPosts} from "./mostCommentsPostSlice";

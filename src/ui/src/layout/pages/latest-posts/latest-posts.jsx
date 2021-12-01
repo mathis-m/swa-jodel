@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import BasePosts from "../base-posts/base-posts";
 import {
-    fetchNextLatestPosts, reFetchNextLatestPosts,
+    fetchNextLatestPosts,
+    reFetchNextLatestPosts,
     useHasMorePosts,
     usePostFetchingStatus,
     usePosts

@@ -1,6 +1,5 @@
 import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
-import produce from "immer";
 import {postApi} from "../../api/post/post-api";
 
 const initialState = {

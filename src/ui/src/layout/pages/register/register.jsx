@@ -5,12 +5,7 @@ import "./register.scss";
 import {Container} from "react-bootstrap";
 import {GoogleLogin} from 'react-google-login';
 import {useDispatch} from "react-redux";
-import {
-    fetchCurrentUser,
-    registerUserGoogle,
-    useUserFetchingStatus, useUserRegisterError,
-    useUserRegisterStatus
-} from "../../../redux/features/userSlice";
+import {registerUserGoogle, useUserRegisterError, useUserRegisterStatus} from "../../../redux/features/userSlice";
 import {Link} from "react-router-dom";
 import {CircularProgress} from "@mui/material";
 //import { FacebookLogin } from 'react-facebook-login'; npm install react-facebook-login

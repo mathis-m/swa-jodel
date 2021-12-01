@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import {
-    fetchNextHighestVotedPosts, reFetchHighestVotedPosts,
+    fetchNextHighestVotedPosts,
+    reFetchHighestVotedPosts,
     useHasMorePosts,
     usePostFetchingStatus,
     usePosts

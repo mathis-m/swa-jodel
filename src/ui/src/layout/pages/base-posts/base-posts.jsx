@@ -1,8 +1,7 @@
-import React, {useRef} from "react";
+import React from "react";
 import "./base-posts.scss"
-import {Col, Container, Row} from "react-bootstrap";
+import {Col} from "react-bootstrap";
 import Post from "../../../components/post/post";
-import {usePosts} from "../../../redux/features/latestPostSlice";
 import {Button, CircularProgress} from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
 

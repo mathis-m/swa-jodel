@@ -1,6 +1,6 @@
 import React from "react";
 import AddIcon from '@mui/icons-material/AddCircleOutline';
-import {Col, Nav} from "react-bootstrap";
+import {Nav} from "react-bootstrap";
 import "./add-post.scss"
 import {Link} from "react-router-dom";
 

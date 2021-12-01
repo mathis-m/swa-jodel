@@ -1,8 +1,20 @@
 .page {
   flex: 0 1 100%;
   padding-top: 10px;
-  overflow-y: scroll;
   align-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  .infinite-scroll-component__outerdiv {
+    height: 100%;
+  }
+  .loader-wrapper {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+  }
   .row {
     margin: 0;
   }

@@ -1,73 +1,13 @@
-import {createSelector, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
 import moment from "moment";
+import {fetchNextLatestPosts, reFetchNextLatestPosts} from "./latestPostSlice";
+import {fetchNextHighestVotedPosts, reFetchHighestVotedPosts} from "./highestVoting";
+import {fetchNextMostCommentsPosts, reFetchMostCommentsPosts} from "./mostCommentsPostSlice";
+import {postApi} from "../../api/post/post-api";
 
 const initialState = {
-    votes: [
-        {
-            postId: 0,
-            voteCount: 65,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 1,
-            voteCount: 65,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 2,
-            voteCount: 65,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 3,
-            voteCount: 10,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 4,
-            voteCount: 54,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 5,
-            voteCount: 99,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 6,
-            voteCount: 50,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 7,
-            voteCount: 33,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 8,
-            voteCount: 22,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-        {
-            postId: 9,
-            voteCount: 0,
-            hasDownVoted: false,
-            hasUpVoted: false
-        },
-    ],
-    status: "idle",
-    error: null,
-    lastDate: moment().format()
+    votes: [],
 }
 
 const votePostUp =
@@ -107,7 +47,73 @@ const votePostDown =
             state.votes[index].voteCount -= diff;
         }
     }
+export const fetchVotingForPost = createAsyncThunk('user/fetchVotingForPost',
+    async (postId) => {
+        return postApi.getVotingForPost(postId);
+    });
 
+export const sendPostUpVoted = createAsyncThunk('user/sendPostUpVoted',
+    async (postId) => {
+        return postApi.votePostUp(postId);
+    });
+
+export const sendPostDownVoted = createAsyncThunk('user/sendPostDownVoted',
+    async (postId) => {
+        return postApi.votePostDown(postId);
+    });
+
+
+const newPostsFetched = (state, action) => {
+    for (let post of action.payload) {
+        const index = state.votes.findIndex(v => v.postId === post.id)
+        if(index === -1) {
+            state.votes.push({
+                postId: post.id,
+                hasUpVoted: false,
+                hasDownVoted: false,
+                voteCount: post.voteCount
+            })
+            continue;
+        }
+
+        if(state.votes[index].voteCount !== post.voteCount)
+            state.votes[index].voteCount = post.voteCount
+    }
+}
+
+const newVotingFetched = (state, action) => {
+    const vote = action.payload;
+    const index = state.votes.findIndex(v => v.postId === vote.postId);
+    if(index === -1) {
+        state.votes.push(vote);
+        return;
+    }
+
+    state.votes[index].hasUpVoted = vote.hasUpVoted;
+    state.votes[index].hasDownVoted = vote.hasDownVoted;
+};
+
+const newPostVotingFetched = (state, action) => {
+    const index = state.votes.findIndex(v => v.postId === action.payload.post.id);
+    if(index === -1) {
+        state.votes.push({
+            postId: action.payload.post.id,
+            hasUpVoted: action.payload.voting.hasUpVoted,
+            hasDownVoted: action.payload.voting.hasDownVoted,
+            voteCount: action.payload.post.voteCount
+        })
+        return;
+    }
+
+    if(state.votes[index].voteCount !== action.payload.post.voteCount)
+        state.votes[index].voteCount = action.payload.post.voteCount;
+
+    if(state.votes[index].hasUpVoted !== action.payload.voting.hasUpVoted)
+        state.votes[index].hasUpVoted = action.payload.voting.hasUpVoted;
+
+    if(state.votes[index].hasDownVoted !== action.payload.voting.hasDownVoted)
+        state.votes[index].hasDownVoted = action.payload.voting.hasDownVoted;
+}
 
 export const votingSlice = createSlice({
     name: 'voting',
@@ -115,6 +121,18 @@ export const votingSlice = createSlice({
     reducers: {
         postUpVoted: votePostUp,
         postDownVoted: votePostDown,
+    },
+    extraReducers(builder) {
+        builder
+            .addCase(fetchNextLatestPosts.fulfilled, newPostsFetched)
+            .addCase(reFetchNextLatestPosts.fulfilled, newPostsFetched)
+            .addCase(fetchNextHighestVotedPosts.fulfilled, newPostsFetched)
+            .addCase(reFetchHighestVotedPosts.fulfilled, newPostsFetched)
+            .addCase(fetchNextMostCommentsPosts.fulfilled, newPostsFetched)
+            .addCase(reFetchMostCommentsPosts.fulfilled, newPostsFetched)
+            .addCase(fetchVotingForPost.fulfilled, newVotingFetched)
+            .addCase(sendPostUpVoted.fulfilled, newPostVotingFetched)
+            .addCase(sendPostDownVoted.fulfilled, newPostVotingFetched)
     }
 })
 
@@ -129,7 +147,7 @@ export const selectVoting = createSelector(
         (state) => state.votes,
         (state, id) => id
     ],
-    (voteState) => id => voteState.votes.find(v => v.postId === id)
+    (voteState) => id => voteState.votes.find(v => v.postId === id) || {}
 );
 export const useVoting = (postId) => useSelector(selectVoting)(postId);
 

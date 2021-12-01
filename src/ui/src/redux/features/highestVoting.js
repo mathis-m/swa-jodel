@@ -1,94 +1,14 @@
 import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
-import moment from "moment";
 import produce from "immer";
+import {postApi} from "../../api/post/post-api";
 
 const initialState = {
-    posts: [
-        {
-            id: 0,
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat arcu ex, at interdum nibh ullamcorper in. Cras euismod arcu vel iaculis vehicula. Nam id nulla velit. Morbi tempus neque eget porttitor pellentesque. Vestibulum ullamcorper neque ante, at euismod lectus mollis quis. Etiam placerat eu sapien eget rhoncus. Quisque risus nibh,",
-            user: "test",
-            date: moment().add(-30, "seconds").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}, {userId: 2, text: "So toll"}],
-        },
-        {
-            id: 1,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-15, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 2,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-20, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}, {userId: 2, text: "So toll"}]
-        },
-        {
-            id: 3,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-50, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 4,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-90, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 5,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-120, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 6,
-            text: " a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-130, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 7,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-2000, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 8,
-            text: "test",
-            user: "test",
-            date: moment().add(-20000, "minutes").format(),
-            locationText: "Stuttgart",
-            comments: [{userId: 1, text: "Hihihi wow"}]
-        },
-        {
-            id: 9,
-            text: "a finibus consequat quis in urna. Nullam magna magna, blandit eget viverra id, ornare eget metus. Nunc placerat posuere malesuada. Aenean fermentum ac est quis ornare. Quisque vel commodo mi. Sed tellus mi, tincidunt id nibh a, iaculis auctor risus. Donec euismod tortor id fermentum egestas. Duis sagittis vulputate lacus at lacinia. Aliquam consequat porttitor porttitor. Nam feugiat viverra odio non euismod. Etiam cursus venenatis tortor, q",
-            user: "other user",
-            date: moment().add(-200000, "minutes").format(),
-            locationText: "Berlin",
-            comments: [{userId: 1, text: "Pimmel"}]
-        },
-    ],
+    posts: [],
     status: "idle",
     error: null,
-    lastDate: moment().format()
+    currentPage: 0,
+    hasMore: true
 }
 
 const addPost =
@@ -96,8 +16,15 @@ const addPost =
         state.posts.push(post)
     }
 export const fetchNextHighestVotedPosts = createAsyncThunk('user/fetchNextHighestVotedPosts',
+    async (_, thunkAPI) => {
+        const state = thunkAPI.getState();
+        const currentPage = selectCurrentPage(state);
+        return postApi.getHighestVotedPosts(currentPage);
+    });
+
+export const reFetchHighestVotedPosts = createAsyncThunk('user/reFetchHighestVotedPosts',
     async () => {
-        return [];
+        return postApi.getHighestVotedPosts(0);
     });
 
 export const highestVotingSlice = createSlice({
@@ -106,6 +33,42 @@ export const highestVotingSlice = createSlice({
     reducers: {
         postAdded: addPost,
     },
+    extraReducers(builder) {
+        builder
+            .addCase(fetchNextHighestVotedPosts.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchNextHighestVotedPosts.fulfilled, (state, action) => {
+                const posts = action.payload;
+                state.status = 'succeeded';
+
+                if (posts.length === 0) {
+                    state.hasMore = false;
+                    return;
+                }
+                state.currentPage++;
+                state.posts.push(...posts);
+            })
+            .addCase(fetchNextHighestVotedPosts.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            });
+        builder
+            .addCase(reFetchHighestVotedPosts.fulfilled, (state, action) => {
+                const posts = action.payload;
+
+                if (posts.length === 0) {
+                    state.hasMore = false;
+                    state.currentPage = 0;
+                    state.status = 'succeeded';
+                    return;
+                }
+                state.posts = posts;
+                state.hasMore = true;
+                state.status = 'succeeded';
+                state.currentPage = 0;
+            })
+    }
 })
 
 export const {
@@ -114,20 +77,27 @@ export const {
 
 const state = (state) => state.highestVotesPosts;
 const votingState = (state) => state.votes.votes;
-
+const selectCurrentPage = createSelector(
+    state,
+    state => state.currentPage
+)
 export const selectPosts = createSelector(
-    [
-        state,
-        votingState
-    ],
-    (state, votingState) => {
-        const findVote = (id) => votingState.find(v => v.postId === id);
-        return produce(state, draft => {
-            draft.posts.sort((a, b) => (findVote(a.id).voteCount < findVote(b.id).voteCount) ? 1 : -1)
-        }).posts;
-    }
-);
+    state,
+    state => state.posts
+)
 
 export const usePosts = () => useSelector(selectPosts);
+
+export const selectHasMorePosts = createSelector(
+    state,
+    state => state.hasMore
+);
+export const useHasMorePosts = () => useSelector(selectHasMorePosts);
+
+export const selectStatusPosts = createSelector(
+    state,
+    state => state.status
+);
+export const usePostFetchingStatus = () => useSelector(selectStatusPosts);
 
 export default highestVotingSlice.reducer;

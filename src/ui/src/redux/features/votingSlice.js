@@ -143,7 +143,7 @@ export const {
 const state = (state) => state.votes;
 export const selectVoting = createSelector(
     [
-        (state) => state.votes,
+        state,
         (state, id) => id
     ],
     (voteState) => id => voteState.votes.find(v => v.postId === id) || {}

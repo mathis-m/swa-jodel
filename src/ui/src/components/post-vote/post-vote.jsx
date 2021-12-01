@@ -5,7 +5,14 @@ import DownVoteIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import "./post-vote.scss"
 import {IconButton} from "@mui/material";
 import {useDispatch} from "react-redux";
-import {postDownVoted, postUpVoted, useVoting} from "../../redux/features/votingSlice";
+import {
+    fetchVotingForPost,
+    postDownVoted,
+    postUpVoted,
+    sendPostDownVoted,
+    sendPostUpVoted,
+    useVoting
+} from "../../redux/features/votingSlice";
 import {useIsLoggedIn} from "../../redux/features/userSlice";
 
 const PostVote = ({postId}) => {
@@ -13,9 +20,9 @@ const PostVote = ({postId}) => {
     const dispatch = useDispatch();
     const {hasUpVoted, hasDownVoted, voteCount} = useVoting(postId);
     useEffect(() => {
-        //if (isLoggedIn)
-            // dispatch(fetchVotingForPost(postId));
-    }, [dispatch, isLoggedIn]);
+        if (isLoggedIn)
+            dispatch(fetchVotingForPost(postId));
+    }, [dispatch]);
     let sxUp = {color: hasUpVoted ? "#7A9F35" : "white"};
     let sxDown = {color: hasDownVoted ? "#E7410FFF" : "white"};
     const withStroke = {
@@ -44,13 +51,13 @@ const PostVote = ({postId}) => {
         if (!isLoggedIn)
             return;
         dispatch(postUpVoted(postId));
-        //dispatch(sendPostUpVoted(postId));
+        dispatch(sendPostUpVoted(postId));
     };
     const onDownVote = () => {
         if (!isLoggedIn)
             return;
         dispatch(postDownVoted(postId));
-        //dispatch(sendPostDownVoted(postId));
+        dispatch(sendPostDownVoted(postId));
     }
     return (
         <div className="post-vote">

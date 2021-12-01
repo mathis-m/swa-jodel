@@ -9,6 +9,7 @@ import de.swa.rest.users.dto.CreateExternalUserDto;
 import de.swa.rest.users.dto.CreateLocalUserDto;
 import de.swa.rest.users.dto.UserResponseDto;
 import de.swa.rest.users.dto.factories.UserEntityToResponseDtoFactory;
+import de.swa.services.UserContextService;
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
@@ -20,8 +21,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestScoped
 @Path("/users")
@@ -31,6 +30,9 @@ public class UserResource {
 
     @Inject
     GoogleTokenValidator googleTokenValidator;
+
+    @Inject
+    UserContextService userContextService;
 
     @Authenticated
     @SecurityRequirements({
@@ -42,17 +44,13 @@ public class UserResource {
             )
     })
     @GET
+    @Path("/me")
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse<List<UserResponseDto>> getUsers() {
-
-        var entities = userRepository.listAll();
-        var returnDto = entities
-                .stream()
-                .map(UserEntityToResponseDtoFactory::map)
-                .collect(Collectors.toList());
+    public RestResponse<UserResponseDto> getMe() {
+        var currentUser = userContextService.getCurrentUser();
 
         return ResponseBuilder
-                .ok(returnDto, MediaType.APPLICATION_JSON_TYPE)
+                .ok(UserEntityToResponseDtoFactory.map(currentUser), MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
 
@@ -103,7 +101,7 @@ public class UserResource {
         }
 
         try {
-            userRepository.createExternalUser(user.getUsername(), googleIdToken.getPayload().getSubject());
+            userRepository.createExternalUser(user.getUserName(), googleIdToken.getPayload().getSubject());
         } catch (UniqueUserNameRequiredException | UniqueExternalIdRequiredException uniqueException) {
             return ResponseBuilder
                     .create(RestResponse.Status.CONFLICT, uniqueException.getMessage())

@@ -1,13 +1,13 @@
 package de.swa.rest.users.dto;
 
 public class CreateExternalUserDto {
-    private String username;
+    private String userName;
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

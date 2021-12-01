@@ -4,7 +4,6 @@ import "./post-date.scss"
 import moment from "moment";
 
 const PostDate = ({date}) => {
-    console.log(date)
     const dateText = moment(date).fromNow();
     return (
         <div className="post-date">

@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Table(name = "posts")
 public class PostEntity extends PanacheEntity {
     public PostEntity() {}
-    public PostEntity(Long userId, String text, String userName) {
+    public PostEntity(Long userId, String text, String userName, String color) {
         this.userId = userId;
         this.user = userName;
+        this.color = color;
         this.text = text;
         this.voteCount = 0L;
         this.commentCount = 0L;
@@ -25,6 +26,9 @@ public class PostEntity extends PanacheEntity {
 
     @Column(name = "user")
     public String user;
+
+    @Column(name = "color")
+    public String color;
 
     @Column(name = "voteCount")
     public Long voteCount;

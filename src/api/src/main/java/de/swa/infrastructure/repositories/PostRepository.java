@@ -11,13 +11,13 @@ import java.util.List;
 @ApplicationScoped
 public class PostRepository implements PanacheRepository<PostEntity> {
     @Transactional
-    public PostEntity createPostFor(Long userId, String user, String text) {
-        return this.createPostFor(userId, user, text, "Demo Location");
+    public PostEntity createPostFor(Long userId, String user, String text, String color) {
+        return this.createPostFor(userId, user, text, color, "Demo Location");
     }
 
     @Transactional
-    public PostEntity createPostFor(Long userId, String user, String text, String locationText) {
-        var entity = new PostEntity(userId, text, user);
+    public PostEntity createPostFor(Long userId, String user, String text, String color, String locationText) {
+        var entity = new PostEntity(userId, text, user, color);
         entity.locationText = locationText;
         entity.persist();
         return entity;

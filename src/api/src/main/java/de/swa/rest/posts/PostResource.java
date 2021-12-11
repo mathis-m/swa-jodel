@@ -88,10 +88,7 @@ public class PostResource {
     @Authenticated
     @SecurityRequirements({
             @SecurityRequirement(
-                    name = "Google"
-            ),
-            @SecurityRequirement(
-                    name = "Local"
+                    name = "CookieAuth"
             )
     })
     @POST
@@ -105,10 +102,7 @@ public class PostResource {
     @Authenticated
     @SecurityRequirements({
             @SecurityRequirement(
-                    name = "Google"
-            ),
-            @SecurityRequirement(
-                    name = "Local"
+                    name = "CookieAuth"
             )
     })
     @POST
@@ -136,10 +130,7 @@ public class PostResource {
     @Authenticated
     @SecurityRequirements({
             @SecurityRequirement(
-                    name = "Google"
-            ),
-            @SecurityRequirement(
-                    name = "Local"
+                    name = "CookieAuth"
             )
     })
     @POST
@@ -147,7 +138,7 @@ public class PostResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public RestResponse<PostResponseDto> createPost(CreatePostDto post) {
         var user = userContextService.getCurrentUser();
-        var entity = postRepository.createPostFor(user.id, user.userName, post.getText());
+        var entity = postRepository.createPostFor(user.id, user.userName, post.getText(), post.getColor().toString());
         return RestResponse.ResponseBuilder
                 .ok(PostEntityToResponseDtoFactory.map(entity), MediaType.APPLICATION_JSON_TYPE)
                 .build();
@@ -156,10 +147,7 @@ public class PostResource {
     @Authenticated
     @SecurityRequirements({
             @SecurityRequirement(
-                    name = "Google"
-            ),
-            @SecurityRequirement(
-                    name = "Local"
+                    name = "CookieAuth"
             )
     })
     @Path("/{id}/vote")
@@ -200,10 +188,7 @@ public class PostResource {
     @Authenticated
     @SecurityRequirements({
             @SecurityRequirement(
-                    name = "Google"
-            ),
-            @SecurityRequirement(
-                    name = "Local"
+                    name = "CookieAuth"
             )
     })
     @Path("/{id}/comments")

@@ -13,6 +13,7 @@ import de.swa.infrastructure.repositories.PostRepository;
 import de.swa.infrastructure.repositories.UserRepository;
 import de.swa.infrastructure.repositories.VotingRepository;
 import de.swa.infrastructure.repositories.exceptions.UniqueUserNameRequiredException;
+import de.swa.rest.posts.Colors;
 import io.quarkus.runtime.StartupEvent;
 
 import java.util.Random;
@@ -40,8 +41,9 @@ public class Startup {
             var t3User = userRepository.createLocalUser("test3", "test3");
             var t4User = userRepository.createLocalUser("test4", "test4");
             Random rand = new Random();
+            Colors[] colors = Colors.values();
             for (int i = 0; i < 15; i++) {
-                var p1 = postRepository.createPostFor(tUser.id, tUser.userName, "This is a very cool yodel by " + tUser.userName + "!!! #" + (i + 1));
+                var p1 = postRepository.createPostFor(tUser.id, tUser.userName, "This is a very cool yodel by " + tUser.userName + "!!! #" + (i + 1), colors[i % colors.length].toString());
                 int max = rand.nextInt(7);
                 addNComments(tUser, max, p1);
                 addVote5050(tUser, rand, p1);
@@ -49,7 +51,7 @@ public class Startup {
                 addVote5050(t2User, rand, p1);
                 addVote5050(t3User, rand, p1);
                 addVote5050(t4User, rand, p1);
-                var p2 = postRepository.createPostFor(t1User.id, t1User.userName, "This is a very cool yodel by " + t1User.userName + "!!! #" + (i + 1));
+                var p2 = postRepository.createPostFor(t1User.id, t1User.userName, "This is a very cool yodel by " + t1User.userName + "!!! #" + (i + 1), colors[(i+3) % colors.length].toString());
                 max = rand.nextInt(4);
                 addNComments(tUser, max, p2);
                 addVote5050(t1User, rand, p2);

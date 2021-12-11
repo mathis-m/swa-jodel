@@ -14,6 +14,7 @@ public class PostEntityToResponseDtoFactory {
         dto.setCommentCount(post.commentCount);
         dto.setUser(post.user);
         dto.setLocationText(post.locationText);
+        dto.setColor(post.color);
         return dto;
     }
 }

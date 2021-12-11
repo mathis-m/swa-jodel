@@ -9,6 +9,7 @@ public class PostResponseDto {
     private Long voteCount;
     private Long commentCount;
     private String text;
+    private String color;
     private String locationText;
     private LocalDateTime createdAt;
 
@@ -74,5 +75,13 @@ public class PostResponseDto {
 
     public void setLocationText(String locationText) {
         this.locationText = locationText;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

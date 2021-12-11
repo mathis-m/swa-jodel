@@ -1,5 +1,4 @@
 import axios from "axios";
-import {storeAccessor} from "../redux/store-accessor";
 
 export class BaseClient {
     instance;
@@ -9,13 +8,6 @@ export class BaseClient {
         });
 
         this.initializeResponseInterceptor();
-    }
-
-    getCurrentAuthHeader = () => {
-        const authorization = storeAccessor.store.getState().user.header;
-        if(authorization == null)
-            return {};
-        return {Authorization: authorization};
     }
 
     initializeResponseInterceptor = () => {

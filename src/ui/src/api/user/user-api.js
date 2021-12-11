@@ -5,12 +5,8 @@ class UserApi extends BaseClient {
         super("/users");
     }
 
-    getCurrentUser = async (header) => await this.instance
-        .get('/me', {
-            headers: {
-                'Authorization': header
-            }
-        });
+    getCurrentUser = async () => await this.instance
+        .get('/me', {withCredentials: true});
 
     createGoogleUser = async (idToken, userName) =>  await this.instance
         .post('/register/google', {userName}, {

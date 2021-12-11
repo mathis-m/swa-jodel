@@ -1,9 +1,11 @@
 import './App.scss';
 import Header from "./layout/header/header";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import React, {lazy, Suspense} from "react";
+import React, {lazy, Suspense, useEffect} from "react";
 import {CircularProgress} from "@mui/material";
 import WithFooter from "./layout/with-footer/with-footer";
+import {useDispatch} from "react-redux";
+import {fetchCurrentUser} from "./redux/features/userSlice";
 
 const NewestPosts = lazy(() => import("./layout/pages/latest-posts/latest-posts"));
 const MostCommentsPosts = lazy(() => import("./layout/pages/most-comments-posts/most-comments-posts"));
@@ -12,6 +14,10 @@ const Login = lazy(() => import("./layout/pages/login/login"));
 const Register = lazy(() => import("./layout/pages/register/register"));
 
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchCurrentUser());
+    }, [dispatch]);
     return (
         <Router>
             <Header/>

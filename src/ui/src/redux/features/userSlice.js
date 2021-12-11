@@ -1,11 +1,11 @@
 import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
 import {userApi} from "../../api/user/user-api";
+import {loginApi} from "../../api/user/login-api";
 
 const initialState = {
     user: undefined,
     status: "idle",
-    header: undefined,
     error: null,
     registerStatus: "idle",
     registerError: null,
@@ -18,11 +18,24 @@ const logout =
     }
 
 export const fetchCurrentUser = createAsyncThunk('user/fetchCurrentUser',
-    async ({idToken, userName, password}) => {
-        const headerPrefix = idToken ? "Bearer" : "Basic";
-        const headerValue = idToken ? idToken : btoa(userName + ":" + password)
+    async () => {
+        return await userApi.getCurrentUser();
+    });
+
+export const loginUserLocal = createAsyncThunk('user/loginUserLocal',
+    async ({userName, password}, thunkAPI) => {
+        const headerPrefix = "Basic";
+        const headerValue = btoa(userName + ":" + password)
         const header = `${headerPrefix} ${headerValue}`
-        return {user: await userApi.getCurrentUser(header), header};
+        await loginApi.loginLocal(header)
+        thunkAPI.dispatch(fetchCurrentUser())
+    });
+
+export const loginUserGoogle = createAsyncThunk('user/loginUserGoogle',
+    async (idToken, thunkAPI) => {
+        const header = `Bearer ${idToken}`
+        await loginApi.loginGoogle(header)
+        thunkAPI.dispatch(fetchCurrentUser())
     });
 
 export const registerUserGoogle = createAsyncThunk('user/registerUserGoogle',
@@ -56,8 +69,7 @@ export const userSlice = createSlice({
             })
             .addCase(fetchCurrentUser.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.user = action.payload.user;
-                state.header = action.payload.header;
+                state.user = action.payload;
             })
             .addCase(fetchCurrentUser.rejected, (state, action) => {
                 state.status = 'failed';

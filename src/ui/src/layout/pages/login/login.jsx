@@ -5,7 +5,13 @@ import "./login.scss";
 import {Container} from "react-bootstrap";
 import {GoogleLogin} from 'react-google-login';
 import {useDispatch} from "react-redux";
-import {fetchCurrentUser, useUser, useUserFetchingStatus} from "../../../redux/features/userSlice";
+import {
+    fetchCurrentUser,
+    loginUserGoogle,
+    loginUserLocal,
+    useUser,
+    useUserFetchingStatus
+} from "../../../redux/features/userSlice";
 import {Link} from "react-router-dom";
 //import { FacebookLogin } from 'react-facebook-login'; npm install react-facebook-login
 //import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -20,12 +26,12 @@ const Login = () => {
     const validateForm = () => userName.length > 0 && password.length > 0;
 
     const handleLocalLogin = () => {
-        dispatch(fetchCurrentUser({userName, password}))
+        dispatch(loginUserLocal({userName, password}))
     };
 
     const responseGoogle = (googleRes) => {
         if (googleRes.tokenId)
-            dispatch(fetchCurrentUser({idToken: googleRes.tokenId}))
+            dispatch(loginUserGoogle(googleRes.tokenId))
     }
 
     return (

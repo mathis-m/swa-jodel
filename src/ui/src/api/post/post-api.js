@@ -18,17 +18,14 @@ class PostApi extends BaseClient {
             params: {page, limit: 15}
         });
     getVotingForPost = async (postId) => await this.instance
-        .get(`/${postId}/vote`, {
-            headers: this.getCurrentAuthHeader()
-        });
+        .get(`/${postId}/vote`);
     votePostUp = async (postId) => await this.instance
-        .post(`/${postId}/vote/up`, undefined, {
-            headers: this.getCurrentAuthHeader()
-        });
+        .post(`/${postId}/vote/up`, undefined, {withCredentials: true});
     votePostDown = async (postId) => await this.instance
-        .post(`/${postId}/vote/down`, undefined,{
-            headers: this.getCurrentAuthHeader()
-        });
+        .post(`/${postId}/vote/down`, undefined, {withCredentials: true});
+
+    createPost = async (post) => await this.instance
+        .post('', post, {withCredentials: true});
 }
 
 export const postApi = new PostApi();

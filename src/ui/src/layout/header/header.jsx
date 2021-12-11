@@ -12,9 +12,12 @@ const Header = () => {
     return (
         <div className="header-container">
             <Container className="header-content">
-                <div className="title">
-                    Yodel
-                </div>
+                <Nav.Link eventKey="home" as={Link} to="/"
+                          className="header-icon">
+                    <div className="title">
+                        Yodel
+                    </div>
+                </Nav.Link>
                 <div className="header-icons">
                     <Nav.Link id="first-item" eventKey="account" as={Link} to="/account"
                               className="header-icon">

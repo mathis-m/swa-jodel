@@ -1,10 +1,10 @@
 package de.swa.services;
 
-import de.swa.auth.GooglePrincipal;
 import de.swa.infrastructure.entities.UserEntity;
 import de.swa.infrastructure.repositories.UserRepository;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.runtime.QuarkusPrincipal;
+import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -22,18 +22,11 @@ public class UserContextService {
         if (principal == null)
             return null;
 
-        var isQuarkusPrincipal = principal instanceof QuarkusPrincipal;
-        if (isQuarkusPrincipal) {
+        var jwtPrinciple = principal instanceof DefaultJWTCallerPrincipal;
+        if (jwtPrinciple) {
             var userName = principal.getName();
             return userRepository.find("userName", userName).firstResult();
         }
-
-        var isGooglePrincipal = principal instanceof GooglePrincipal;
-        if (isGooglePrincipal) {
-            var externalId = ((GooglePrincipal) principal).getId();
-            return userRepository.find("externalId", externalId).firstResult();
-        }
-
         return null;
     }
 }

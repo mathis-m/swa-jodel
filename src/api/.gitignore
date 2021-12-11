@@ -1,3 +1,7 @@
+#certs
+src/main/resources/privateKey.pem
+src/main/resources/publicKey.pem
+src/main/resources/rsaPrivateKey.pem
 #Maven
 target/
 pom.xml.tag

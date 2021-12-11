@@ -1,7 +1,7 @@
 package de.swa.rest.users;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import de.swa.auth.GoogleTokenValidator;
+import de.swa.services.TokenValidationService;
 import de.swa.infrastructure.repositories.UserRepository;
 import de.swa.infrastructure.repositories.exceptions.UniqueExternalIdRequiredException;
 import de.swa.infrastructure.repositories.exceptions.UniqueUserNameRequiredException;
@@ -29,18 +29,15 @@ public class UserResource {
     UserRepository userRepository;
 
     @Inject
-    GoogleTokenValidator googleTokenValidator;
+    UserContextService userContextService;
 
     @Inject
-    UserContextService userContextService;
+    TokenValidationService tokenValidationService;
 
     @Authenticated
     @SecurityRequirements({
             @SecurityRequirement(
-                    name = "Google"
-            ),
-            @SecurityRequirement(
-                    name = "Local"
+                    name = "CookieAuth"
             )
     })
     @GET
@@ -92,7 +89,7 @@ public class UserResource {
         var token = authHeader.replace("Bearer ", "");
         GoogleIdToken googleIdToken = null;
         try {
-            googleIdToken = googleTokenValidator.yodelVerifier.verify(token);
+            googleIdToken = tokenValidationService.getGoogleIdToken(token);
         } catch (Exception e) {
             return provideValidGoogleBearer;
         }

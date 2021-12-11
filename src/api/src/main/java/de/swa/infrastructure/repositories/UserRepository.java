@@ -3,6 +3,7 @@ package de.swa.infrastructure.repositories;
 import de.swa.infrastructure.entities.UserEntity;
 import de.swa.infrastructure.repositories.exceptions.UniqueExternalIdRequiredException;
 import de.swa.infrastructure.repositories.exceptions.UniqueUserNameRequiredException;
+import de.swa.infrastructure.repositories.exceptions.UserNotFoundException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
@@ -24,6 +25,26 @@ public class UserRepository implements PanacheRepository<UserEntity> {
         entity.role = "user";
         entity.persist();
         return entity;
+    }
+
+    public UserEntity getUserByName(String userName) throws UserNotFoundException {
+        var user = this
+                .find("userName", userName)
+                .firstResult();
+        if (user == null) {
+           throw new UserNotFoundException();
+        }
+        return user;
+    }
+
+    public UserEntity getUserByExternalId(String externalId) throws UserNotFoundException {
+        var user = this
+                .find("externalId",externalId)
+                .firstResult();
+        if (user == null) {
+           throw new UserNotFoundException();
+        }
+        return user;
     }
 
     @Transactional

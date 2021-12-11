@@ -9,3 +9,14 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
+  jwtCertGenerator:
+    image: frapsoft/openssl
+    entrypoint: /bin/ash
+    command: >
+      -c "openssl genrsa -out /export/rsaPrivateKey.pem 2048
+      && openssl rsa -pubout -in /export/rsaPrivateKey.pem -out /export/publicKey.pem
+      && openssl pkcs8 -topk8 -nocrypt -inform pem -in /export/rsaPrivateKey.pem -outform pem -out /export/privateKey.pem"
+    volumes:
+      - "./api/src/main/resources:/export"
+    
+

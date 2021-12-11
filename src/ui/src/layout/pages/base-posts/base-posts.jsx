@@ -24,7 +24,7 @@ const BasePosts = ({posts, hasMore, fetchMoreData, listKey, isReloading}) => {
                             {
                                 posts.map((p) => (
                                     <Col key={listKey + "-post-id-" + p.id} sm={12} md={4} className="post-container">
-                                        <Post id={p.id} color={colorArray[p.id % colorArray.length]} text={p.text}
+                                        <Post id={p.id} color={p.color} text={p.text}
                                               user={p.user}
                                               date={p.createdAt} commentCount={p.commentCount}
                                               locationText={p.locationText}/>

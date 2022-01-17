@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -37,6 +38,7 @@ public class PostEntity extends PanacheEntity {
     public Long commentCount;
 
     @Column(name = "text")
+    @Lob
     public String text;
 
     @Column(name = "locationText")
@@ -44,4 +46,26 @@ public class PostEntity extends PanacheEntity {
 
     @Column(name = "createdAt")
     public LocalDateTime createdAt;
+
+    @Column(name = "lat")
+    public Double lat;
+
+    @Column(name = "lon")
+    public Double lon;
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
+    }
 }

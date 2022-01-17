@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public class CommentEntity extends PanacheEntity {
     @Column(name = "postId")
     public Long postId;
 
+    @Lob
     @Column(name = "text")
     public String text;
 

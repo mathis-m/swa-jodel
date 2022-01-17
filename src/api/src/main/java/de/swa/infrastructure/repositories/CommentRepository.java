@@ -11,10 +11,9 @@ import java.util.List;
 
 @ApplicationScoped
 public class CommentRepository implements PanacheRepository<CommentEntity> {
-    public List<CommentEntity> getCommentsOfPost(Long postId, Integer page, Integer limit) {
+    public List<CommentEntity> getCommentsOfPost(Long postId) {
         return this
             .find("postId", Sort.descending("createdAt"), postId)
-            .page(page, limit)
             .list();
     }
 

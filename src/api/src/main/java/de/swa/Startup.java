@@ -34,6 +34,9 @@ public class Startup {
     public void loadUsers(@Observes StartupEvent evt) {
         // reset and load all test users
         userRepository.deleteAll();
+        postRepository.deleteAll();
+        commentRepository.deleteAll();
+        votingRepository.deleteAll();
         try {
             var tUser = userRepository.createLocalUser("test", "test");
             tUser = userRepository.updateLocation(tUser.id, 48.7900268, 9.2538728);

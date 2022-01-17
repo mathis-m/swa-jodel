@@ -2,11 +2,11 @@ import {BaseClient} from "../base-client";
 
 class LoginApi extends BaseClient {
     constructor() {
-        super("/login");
+        super("");
     }
 
     loginLocal = async (basicHeader) =>  await this.instance
-        .post('/local', undefined, {
+        .post('/login/local', undefined, {
             headers: {
                 'Authorization': basicHeader
             },
@@ -14,10 +14,15 @@ class LoginApi extends BaseClient {
         })
 
     loginGoogle = async (bearerHeader) =>  await this.instance
-        .post('/google', undefined, {
+        .post('/login/google', undefined, {
             headers: {
                 'Authorization': bearerHeader
             },
+            withCredentials: true
+        })
+
+    logout = async () => await this.instance
+        .post('/logout', undefined, {
             withCredentials: true
         })
 }

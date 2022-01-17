@@ -5,11 +5,16 @@ import "./register.scss";
 import {Container} from "react-bootstrap";
 import {GoogleLogin} from 'react-google-login';
 import {useDispatch} from "react-redux";
-import {registerUserGoogle, useUserRegisterError, useUserRegisterStatus} from "../../../redux/features/userSlice";
+import {
+    registerUserFacebook,
+    registerUserGoogle,
+    registerUserLocal,
+    useUserRegisterError,
+    useUserRegisterStatus
+} from "../../../redux/features/userSlice";
 import {Link} from "react-router-dom";
 import {CircularProgress} from "@mui/material";
-//import { FacebookLogin } from 'react-facebook-login'; npm install react-facebook-login
-//import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import FacebookLogin from 'react-facebook-login';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -19,23 +24,35 @@ const Register = () => {
     const registerError = useUserRegisterError();
     const [googleResponseSuccess, setGoogleResponseSuccess] = useState(false);
     const [idToken, setIdToken] = useState(null);
+    const [fAccessToken, setFAccessToken] = useState(null);
 
     const validateForm = () => userName.length > 0 && password.length > 0;
     const validateUsername = () => userName.length > 0;
 
     const handleSubmit = event => {
         event.preventDefault();
+        dispatch(registerUserLocal({userName, password}))
     };
 
     const handleExternalUserNameSet = event => {
         event.preventDefault();
-        dispatch(registerUserGoogle({idToken, userName: userName}))
+        if(idToken)
+            dispatch(registerUserGoogle({idToken, userName: userName}))
+        if(fAccessToken)
+            dispatch(registerUserFacebook({accessToken: fAccessToken, userName: userName}))
     };
 
     const responseGoogle = (googleRes) => {
         if (googleRes.tokenId) {
             setGoogleResponseSuccess(true);
-            setIdToken(googleRes.tokenId)
+            setIdToken(googleRes.tokenId);
+        }
+    }
+    const responseFacebook = (faceRes) => {
+        console.log(faceRes);
+        if(faceRes.accessToken) {
+            setGoogleResponseSuccess(true);
+            setFAccessToken(faceRes.accessToken);
         }
     }
 
@@ -43,7 +60,7 @@ const Register = () => {
         <Container className="login-page">
             <div className="login">
                 {
-                    (!googleResponseSuccess || registerStatus === "failed") && <Form onSubmit={handleSubmit}>
+                    (registerStatus !== "succeeded") && !googleResponseSuccess && <Form onSubmit={handleSubmit}>
                         <Form.Label className="login-font">Registrierung</Form.Label>
                         <Form.Group size="lg" controlId="email">
                             <Form.Label>Email</Form.Label>
@@ -74,12 +91,10 @@ const Register = () => {
                                 cookiePolicy={'single_host_origin'}
                                 redirectUri="postmessage"
                             />
-                            {/* <FacebookLogin
-                            appId="1088597931155576"
-                            autoLoad={true}
-                            fields="name,userName,picture"
-                            onClick={componentClicked}
-                            callback={responseFacebook} />*/}
+                            <FacebookLogin
+                                appId="645474663161542"
+                                fields="email"
+                                callback={responseFacebook} />
                             {registerStatus === "failed" && <div>Es ist ein Fehler während der Registrierung aufgetreten <br/> {registerError}</div>}
                         </div>
                     </Form>

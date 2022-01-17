@@ -6,13 +6,14 @@ import {Container} from "react-bootstrap";
 import {GoogleLogin} from 'react-google-login';
 import {useDispatch} from "react-redux";
 import {
-    fetchCurrentUser,
+    fetchCurrentUser, loginUserFacebook,
     loginUserGoogle,
     loginUserLocal,
     useUser,
     useUserFetchingStatus
 } from "../../../redux/features/userSlice";
 import {Link} from "react-router-dom";
+import FacebookLogin from "react-facebook-login";
 //import { FacebookLogin } from 'react-facebook-login'; npm install react-facebook-login
 //import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
@@ -34,11 +35,16 @@ const Login = () => {
             dispatch(loginUserGoogle(googleRes.tokenId))
     }
 
+    const responseFacebook = (faceRes) => {
+        if (faceRes.accessToken)
+            dispatch(loginUserFacebook(faceRes.accessToken))
+    }
+
     return (
         <Container className="login-page">
             <div className="login">
                 {
-                    loginStatus !== "succeeded" && <Form>
+                    !user && <Form>
                         <Form.Label className="login-font">Login</Form.Label>
                         <Form.Group size="lg" controlId="email">
                             <Form.Label>Nutzername</Form.Label>
@@ -69,19 +75,17 @@ const Login = () => {
                                 cookiePolicy={'single_host_origin'}
                                 redirectUri="postmessage"
                             />
-                            {/* <FacebookLogin
-                            appId="1088597931155576"
-                            autoLoad={true}
-                            fields="name,userName,picture"
-                            onClick={componentClicked}
-                            callback={responseFacebook} />*/}
+                            <FacebookLogin
+                                appId="645474663161542"
+                                fields="email"
+                                callback={responseFacebook} />
                             {loginStatus !== "failed" && <Link to="/register">Jetzt registrieren!</Link>}
                             {loginStatus === "failed" && <div>Login hat nicht geklappt! Bist du bereits registriert? <Link to="/register">Jetzt registrieren!</Link></div>}
                         </div>
                     </Form>
                 }
                 {
-                    loginStatus === "succeeded" && user && <div>Willkommen jetzt {user.userName}, <Link to="/">jetzt aktuelle Yodels ansehen!</Link></div>
+                    user && <div>Willkommen jetzt {user.userName}, <Link to="/">jetzt aktuelle Yodels ansehen!</Link></div>
                 }
             </div>
         </Container>

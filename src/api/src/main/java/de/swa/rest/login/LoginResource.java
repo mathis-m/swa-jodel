@@ -138,4 +138,30 @@ public class LoginResource {
                 .cookie(cookie)
                 .build();
     }
+
+    @POST()
+    @Path("/facebook")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    @PermitAll
+    public RestResponse<String> loginFacebook(@RestHeader(AUTHORIZATION_HEADER) String authHeader) {
+        if (authHeader == null) {
+            throw new UnauthorizedException();
+        }
+        if (!authHeader.startsWith(BEARER)) {
+            throw new UnauthorizedException("Please use Bearer authentication");
+        }
+        var bearerToken = authHeader.substring(BEARER_PREFIX_LENGTH);
+        String id = tokenValidationService.getFacebookId(bearerToken);
+        if (id == null) {
+            throw new UnauthorizedException("Invalid facebook token");
+        }
+        UserEntity user;
+        try {
+            user = userRepository.getUserByExternalId(id);
+        } catch (UserNotFoundException e) {
+            throw new UnauthorizedException();
+        }
+        return getTokenResponseForUser(user);
+    }
 }

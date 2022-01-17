@@ -129,4 +129,42 @@ public class UserResource {
                 .ok("Google user successful registered!", MediaType.TEXT_PLAIN)
                 .build();
     }
+
+    @POST()
+    @Path("/register/facebook")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse<String> createUserByFacebook(
+            CreateExternalUserDto user,
+            @RestHeader("Authorization") String authHeader
+    ) {
+        RestResponse<String> provideValidFacebookBearer = ResponseBuilder
+                .create(RestResponse.Status.UNAUTHORIZED, "Please provide valid Facebook Bearer")
+                .build();
+        if (authHeader == null) {
+            return provideValidFacebookBearer;
+        }
+        var token = authHeader.replace("Bearer ", "");
+        String facebookId = null;
+        try {
+            facebookId = tokenValidationService.getFacebookId(token);
+        } catch (Exception e) {
+            return provideValidFacebookBearer;
+        }
+        if (facebookId == null) {
+            return provideValidFacebookBearer;
+        }
+
+        try {
+            userRepository.createExternalUser(user.getUserName(), facebookId);
+        } catch (UniqueUserNameRequiredException | UniqueExternalIdRequiredException uniqueException) {
+            return ResponseBuilder
+                    .create(RestResponse.Status.CONFLICT, uniqueException.getMessage())
+                    .build();
+        }
+
+        return ResponseBuilder
+                .ok("Facebook user successful registered!", MediaType.TEXT_PLAIN)
+                .build();
+    }
 }

@@ -21,6 +21,14 @@ class LoginApi extends BaseClient {
             withCredentials: true
         })
 
+    loginFacebook = async (bearerHeader) =>  await this.instance
+        .post('/login/facebook', undefined, {
+            headers: {
+                'Authorization': bearerHeader
+            },
+            withCredentials: true
+        })
+
     logout = async () => await this.instance
         .post('/logout', undefined, {
             withCredentials: true

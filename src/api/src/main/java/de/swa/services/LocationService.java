@@ -52,6 +52,7 @@ public class LocationService {
             }
             return locationText;
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
             return "No Location";
         }
     }

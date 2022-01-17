@@ -61,11 +61,34 @@ export const loginUserGoogle = createAsyncThunk('user/loginUserGoogle',
         }
         thunkAPI.dispatch(fetchCurrentUser())
     });
+export const loginUserFacebook = createAsyncThunk('user/loginUserFacebook',
+    async (accessToken, thunkAPI) => {
+        const header = `Bearer ${accessToken}`
+        await loginApi.loginFacebook(header)
+        const state = thunkAPI.getState();
+        if(state.user.lat && state.user.lon) {
+            thunkAPI.dispatch(updateLocation({lat: state.user.lat, lon: state.user.lon}))
+        }
+        thunkAPI.dispatch(fetchCurrentUser())
+    });
 
 export const registerUserGoogle = createAsyncThunk('user/registerUserGoogle',
     async ({idToken, userName}, {rejectWithValue}) => {
         try {
             return await userApi.createGoogleUser(idToken, userName);
+        } catch (err) {
+            if (!err.response) {
+                throw err
+            }
+
+            return rejectWithValue(err.response.data)
+        }
+    });
+
+export const registerUserFacebook = createAsyncThunk('user/registerUserFacebook',
+    async ({accessToken, userName}, {rejectWithValue}) => {
+        try {
+            return await userApi.createFacebookUser(accessToken, userName);
         } catch (err) {
             if (!err.response) {
                 throw err
@@ -107,6 +130,17 @@ export const userSlice = createSlice({
                 state.registerStatus = "succeeded";
             })
             .addCase(registerUserGoogle.rejected, (state, action) => {
+                state.registerStatus = 'failed';
+                state.registerError = action.error.message;
+            });
+        builder
+            .addCase(registerUserLocal.pending, (state, action) => {
+                state.registerStatus = 'loading';
+            })
+            .addCase(registerUserLocal.fulfilled, (state, action) => {
+                state.registerStatus = "succeeded";
+            })
+            .addCase(registerUserLocal.rejected, (state, action) => {
                 state.registerStatus = 'failed';
                 state.registerError = action.error.message;
             });

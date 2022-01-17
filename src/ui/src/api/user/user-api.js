@@ -14,9 +14,15 @@ class UserApi extends BaseClient {
                 'Authorization': `Bearer ${idToken}`
             }
         })
+    createFacebookUser = async (accessToken, userName) =>  await this.instance
+        .post('/register/facebook', {userName}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
 
     createLocalUser = async (userName, password) =>  await this.instance
-        .post('/register/local', {userName, password})
+        .post('/register/local', {username: userName, password})
 
     updateLocation = async (lat, lon) =>  await this.instance
         .post('/my/location', {lon, lat}, {withCredentials: true})

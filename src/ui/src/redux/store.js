@@ -1,5 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit'
 import userSliceReducer from "./features/userSlice";
+import commentsSliceReducer from "./features/commentsSlice";
 import newestPostSliceReducer from "./features/latestPostSlice";
 import mostCommentsPostSliceReducer from "./features/mostCommentsPostSlice";
 import votingSliceReducer from "./features/votingSlice";
@@ -13,7 +14,8 @@ export const store = configureStore({
         votes: votingSliceReducer,
         newestPosts: newestPostSliceReducer,
         mostCommentsPosts: mostCommentsPostSliceReducer,
-        highestVotesPosts: highestVotingSliceReducer
+        highestVotesPosts: highestVotingSliceReducer,
+        comments: commentsSliceReducer
     },
 })
 export default store;

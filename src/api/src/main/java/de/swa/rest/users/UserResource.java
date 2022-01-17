@@ -1,6 +1,7 @@
 package de.swa.rest.users;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import de.swa.rest.users.dto.UpdateLocationDto;
 import de.swa.services.TokenValidationService;
 import de.swa.infrastructure.repositories.UserRepository;
 import de.swa.infrastructure.repositories.exceptions.UniqueExternalIdRequiredException;
@@ -48,6 +49,25 @@ public class UserResource {
 
         return ResponseBuilder
                 .ok(UserEntityToResponseDtoFactory.map(currentUser), MediaType.APPLICATION_JSON_TYPE)
+                .build();
+    }
+
+    @Authenticated
+    @SecurityRequirements({
+            @SecurityRequirement(
+                    name = "CookieAuth"
+            )
+    })
+    @POST
+    @Path("/my/location")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse<UserResponseDto> updateLocation(UpdateLocationDto locationDto) {
+        var currentUser = userContextService.getCurrentUser();
+
+        var updated = userRepository.updateLocation(currentUser.id, locationDto.getLat(), locationDto.getLon());
+
+        return ResponseBuilder
+                .ok(UserEntityToResponseDtoFactory.map(updated), MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
 

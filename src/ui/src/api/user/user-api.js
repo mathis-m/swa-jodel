@@ -17,6 +17,9 @@ class UserApi extends BaseClient {
 
     createLocalUser = async (userName, password) =>  await this.instance
         .post('/register/local', {userName, password})
+
+    updateLocation = async (lat, lon) =>  await this.instance
+        .post('/my/location', {lon, lat}, {withCredentials: true})
 }
 
 export const userApi = new UserApi();

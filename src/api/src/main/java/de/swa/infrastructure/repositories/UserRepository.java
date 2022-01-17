@@ -64,4 +64,13 @@ public class UserRepository implements PanacheRepository<UserEntity> {
         entity.role = "user";
         entity.persist();
     }
+
+    @Transactional
+    public UserEntity updateLocation(Long userId, Double lat, Double lon) {
+        var userEntity = this.findById(userId);
+        userEntity.setLat(lat);
+        userEntity.setLon(lon);
+        userEntity.persist();
+        return userEntity;
+    }
 }

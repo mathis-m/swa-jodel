@@ -8,6 +8,8 @@ public class UserEntityToResponseDtoFactory {
         var dto = new UserResponseDto();
         dto.setUserName(user.userName);
         dto.setId(user.id);
+        dto.setLat(user.lat);
+        dto.setLon(user.lon);
         return dto;
     }
 }

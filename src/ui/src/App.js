@@ -5,17 +5,24 @@ import React, {lazy, Suspense, useEffect} from "react";
 import {CircularProgress} from "@mui/material";
 import WithFooter from "./layout/with-footer/with-footer";
 import {useDispatch} from "react-redux";
-import {fetchCurrentUser} from "./redux/features/userSlice";
+import {fetchCurrentUser, updateLocation} from "./redux/features/userSlice";
 
 const NewestPosts = lazy(() => import("./layout/pages/latest-posts/latest-posts"));
 const MostCommentsPosts = lazy(() => import("./layout/pages/most-comments-posts/most-comments-posts"));
 const HighestVoting = lazy(() => import("./layout/pages/highest-voting-posts/highest-voting"));
 const Login = lazy(() => import("./layout/pages/login/login"));
+const Logout = lazy(() => import("./layout/pages/logout/logout"));
 const Register = lazy(() => import("./layout/pages/register/register"));
 
 function App() {
     const dispatch = useDispatch();
     useEffect(() => {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            dispatch(updateLocation({
+                lat: pos.coords.latitude,
+                lon: pos.coords.longitude
+            }));
+        });
         dispatch(fetchCurrentUser());
     }, [dispatch]);
     return (
@@ -52,6 +59,9 @@ function App() {
                 </Switch>
                 <Switch>
                     <Route exact path="/register" component={Register}/>
+                </Switch>
+                <Switch>
+                    <Route exact path="/logout" component={Logout}/>
                 </Switch>
             </Suspense>
         </Router>

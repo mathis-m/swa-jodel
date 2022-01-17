@@ -7,6 +7,7 @@ import de.swa.rest.posts.dto.*;
 import de.swa.rest.posts.dto.factories.CommentEntityToResponseDtoFactory;
 import de.swa.rest.posts.dto.factories.PostEntityToResponseDtoFactory;
 import de.swa.rest.posts.dto.factories.VotingEntityToResponseDtoFactory;
+import de.swa.services.LocationService;
 import de.swa.services.UserContextService;
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
@@ -33,6 +34,8 @@ public class PostResource {
     CommentRepository commentRepository;
     @Inject
     UserContextService userContextService;
+    @Inject
+    LocationService locationService;
 
     @GET()
     @Path("/newest")
@@ -40,7 +43,8 @@ public class PostResource {
     public RestResponse<List<PostResponseDto>> getNewestPosts(@RestQuery("page") Integer page, @RestQuery("limit") Integer limit) {
         if (page == null || limit == null)
             throw new BadRequestException("page and limit must be set");
-        var entities = postRepository.getNewestPost(page, limit);
+        var user = userContextService.getCurrentUser();
+        var entities = postRepository.getNewestPost(page, limit, user == null ? null : user.lat, user == null ? null : user.lon);
         var returnDto = entities
                 .stream()
                 .map(PostEntityToResponseDtoFactory::map)
@@ -57,7 +61,8 @@ public class PostResource {
     public RestResponse<List<PostResponseDto>> getMostCommentsPosts(@RestQuery("page") Integer page, @RestQuery("limit") Integer limit) {
         if (page == null || limit == null)
             throw new BadRequestException("page and limit must be set");
-        var entities = postRepository.getMostCommentsPosts(page, limit);
+        var user = userContextService.getCurrentUser();
+        var entities = postRepository.getMostCommentsPosts(page, limit, user == null ? null : user.lat, user == null ? null : user.lon);
         var returnDto = entities
                 .stream()
                 .map(PostEntityToResponseDtoFactory::map)
@@ -74,7 +79,8 @@ public class PostResource {
     public RestResponse<List<PostResponseDto>> getMostVotesPosts(@RestQuery("page") Integer page, @RestQuery("limit") Integer limit) {
         if (page == null || limit == null)
             throw new BadRequestException("page and limit must be set");
-        var entities = postRepository.getMostVotesPosts(page, limit);
+        var user = userContextService.getCurrentUser();
+        var entities = postRepository.getMostVotesPosts(page, limit, user == null ? null : user.lat, user == null ? null : user.lon);
         var returnDto = entities
                 .stream()
                 .map(PostEntityToResponseDtoFactory::map)
@@ -138,7 +144,8 @@ public class PostResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public RestResponse<PostResponseDto> createPost(CreatePostDto post) {
         var user = userContextService.getCurrentUser();
-        var entity = postRepository.createPostFor(user.id, user.userName, post.getText(), post.getColor().toString());
+        var location = locationService.getLocation(user.lat, user.lon);
+        var entity = postRepository.createPostFor(user.id, user.userName, post.getText(), post.getColor().toString(), location, user.lat, user.lon);
         return RestResponse.ResponseBuilder
                 .ok(PostEntityToResponseDtoFactory.map(entity), MediaType.APPLICATION_JSON_TYPE)
                 .build();
@@ -168,13 +175,9 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public RestResponse<List<CommentResponseDto>> getComments(
-            @RestPath("id") Long postId,
-            @RestQuery("page") Integer page,
-            @RestQuery("limit") Integer limit
+            @RestPath("id") Long postId
     ) {
-        if (page == null || limit == null)
-            throw new BadRequestException("page and limit must be set");
-        var entities = commentRepository.getCommentsOfPost(postId, page, limit);
+        var entities = commentRepository.getCommentsOfPost(postId);
         var returnDto = entities
                 .stream()
                 .map(CommentEntityToResponseDtoFactory::map)

@@ -9,7 +9,7 @@ import {colorArray} from "../../../utils/colorArray";
 const BasePosts = ({posts, hasMore, fetchMoreData, listKey, isReloading}) => {
     return (
         <div className="page container">
-            <div style={{height: "100%"}}>
+            <div style={{height: "100%", width: "100%"}}>
                 {
                     isReloading
                         ? <div className="loader-wrapper" style={{height: "100%"}}><CircularProgress/></div>
@@ -27,7 +27,7 @@ const BasePosts = ({posts, hasMore, fetchMoreData, listKey, isReloading}) => {
                                         <Post id={p.id} color={p.color} text={p.text}
                                               user={p.user}
                                               date={p.createdAt} commentCount={p.commentCount}
-                                              locationText={p.locationText}/>
+                                              locationText={p.locationText} allowModal={true}/>
                                     </Col>
                                 ))
                             }

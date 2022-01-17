@@ -15,6 +15,12 @@ const addPost =
     (state, post) => {
         state.posts.push(post)
     }
+export const setCommentCount =
+    (state, action) => {
+        const index = state.posts.findIndex(p => p.id === action.payload.id);
+        if(index === -1) return;
+        state.posts[index].commentCount++;
+    }
 export const fetchNextHighestVotedPosts = createAsyncThunk('user/fetchNextHighestVotedPosts',
     async (_, thunkAPI) => {
         const state = thunkAPI.getState();
@@ -32,6 +38,7 @@ export const highestVotingSlice = createSlice({
     initialState,
     reducers: {
         postAdded: addPost,
+        hCommentAdded: setCommentCount
     },
     extraReducers(builder) {
         builder
@@ -81,6 +88,7 @@ export const highestVotingSlice = createSlice({
 
 export const {
     postAdded,
+    hCommentAdded
 } = highestVotingSlice.actions
 
 const state = (state) => state.highestVotesPosts;

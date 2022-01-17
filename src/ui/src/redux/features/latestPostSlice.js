@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
 import {postApi} from "../../api/post/post-api";
+import {setCommentCount} from "./highestVoting";
 
 const initialState = {
     posts: [],
@@ -32,6 +33,7 @@ export const latestPostSlice = createSlice({
     initialState,
     reducers: {
         postAdded: addPost,
+        lCommentAdded: setCommentCount
     },
     extraReducers(builder) {
         builder
@@ -81,6 +83,7 @@ export const latestPostSlice = createSlice({
 
 export const {
     postAdded,
+    lCommentAdded
 } = latestPostSlice.actions
 
 const state = (state) => state.newestPosts;

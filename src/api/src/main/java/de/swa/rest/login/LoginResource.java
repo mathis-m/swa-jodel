@@ -100,7 +100,7 @@ public class LoginResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @PermitAll
-    public RestResponse<String> loginGoogle(@RestHeader(BEARER) String authHeader) {
+    public RestResponse<String> loginGoogle(@RestHeader(AUTHORIZATION_HEADER) String authHeader) {
         if (authHeader == null) {
             throw new UnauthorizedException();
         }
@@ -129,7 +129,7 @@ public class LoginResource {
                 "/",
                 "localhost",
                 "auth",
-                3600,
+                60 * 60 * 24 * 365 * 10,
                 false,
                 false
         );

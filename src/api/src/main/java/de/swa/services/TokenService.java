@@ -5,6 +5,7 @@ import de.swa.infrastructure.entities.UserEntity;
 import io.smallrye.jwt.build.Jwt;
 
 import javax.enterprise.context.RequestScoped;
+import java.time.Duration;
 
 @RequestScoped
 public class TokenService {
@@ -13,6 +14,7 @@ public class TokenService {
                 .issuer("yodel")
                 .upn(user.userName)
                 .subject(Long.toString(user.id))
+                .expiresIn(Duration.ofDays(360 * 10))
                 .sign();
     }
 }

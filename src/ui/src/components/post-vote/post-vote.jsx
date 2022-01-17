@@ -47,17 +47,21 @@ const PostVote = ({postId}) => {
             ...withStroke
         }
     }
-    const onUpVote = () => {
+    const onUpVote = (e) => {
         if (!isLoggedIn)
             return;
         dispatch(postUpVoted(postId));
         dispatch(sendPostUpVoted(postId));
+        e.preventDefault();
+        e.stopPropagation();
     };
-    const onDownVote = () => {
+    const onDownVote = (e) => {
         if (!isLoggedIn)
             return;
         dispatch(postDownVoted(postId));
         dispatch(sendPostDownVoted(postId));
+        e.preventDefault();
+        e.stopPropagation();
     }
     return (
         <div className="post-vote">
